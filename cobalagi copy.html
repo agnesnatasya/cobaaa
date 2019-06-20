@@ -1,0 +1,96 @@
+<html>
+        <head>
+                <script type="text/javascript" src="d3.min.js"></script>
+                <style>
+                 th:empty, td:empty { background: gray; }
+                </style>
+                                
+        </head>
+        <body>
+                <br>
+                <br>
+
+        Enter your 8-digit staff number: <input type="text" id="foo" value="">
+        <button onclick="getValue()">Submit</button><br>
+        <table id="boo" border=1 width=50% style="float: left;"></table>
+        <table id="mentor" border=1 width=50%></table>
+        <table id="group" border=1 width=100%></table>
+        <table id="mentees" border=1 width=100%></table>
+        
+                
+                
+                <script>
+                function getValue() {
+                var y = document.getElementById("boo");
+                var mentor=document.getElementById("mentor");
+                var groupTable = document.getElementById("group");
+                var menteesTable = document.getElementById("mentees");
+                var x = document.getElementById("foo").value;
+                var userTitle;
+                var userRank;
+                var userFleet;
+                var userName;
+                var mentorTitle;
+                var mentorRank;
+                var mentorName;
+                var mentorFleet;
+                var mentorEmail;
+                var groupTitle;
+                var groupRank;
+                var groupName;
+                var groupFleet;
+                var groupEmail;
+                var menteesTitle;
+                var menteesRank;
+                var menteesName;
+                var menteesFleet;
+                var menteesEmail;
+                var indCount=0;
+                var presence=[];
+                y.innerHTML=""
+                y.innerHTML+="<tr><th>Title</th><th>Rank</th><th>Name</th><th>Fleet</th></tr>";
+                mentor.innerHTML=""
+                mentor.innerHTML+="<tr><th>Mentor's Title</th><th>Mentor's Rank</th><th>Mentor's Name</th><th>Mentor's Fleet</th><th>Mentor's Email</th></tr>";
+                groupTable.innerHTML="";
+                groupTable.innerHTML+="<table><tr><th>Title</th><th>Rank</th><th>Name</th><th>Fleet</th><th>Email</th></tr>";
+                menteesTable.innerHTML="";
+                menteesTable.innerHTML+="<table><tr><th>Title</th><th>Rank</th><th>Name</th><th>Fleet</th><th>Email</th></tr>";
+                d3.csv("https://raw.githubusercontent.com/agnesnatasya/cobaaa/master/abal.csv", function(data){
+	                if (Number(data.PN)==Number(x)){
+                                y.innerHTML+="<tr><td>"+ data.Title +"</td><td>" + data.Rank +"</td><td>" + data.Name +"</td><td>" + data.Fleet +"</td></tr>";
+                                userTitle=data.Title;
+                                userRank=data.Rank;
+                                userFleet=data.Fleet;
+                                userName=data.Name;
+                                mentorName=data.Mentor;
+                        //kurang fleet, mentor title rank sama mentor email
+	                }
+                });
+                d3.csv("https://raw.githubusercontent.com/agnesnatasya/cobaaa/master/abal.csv", function(data){
+	                if (data.Name==mentorName){
+                                mentor.innerHTML+="<tr><td>"+ data.Title +"</td><td>" + data.Rank +"</td><td>" + data.Name +"</td><td>" + data.Fleet +"</td><td>" + data.Email+"</td></tr>";
+                                mentorTitle=data.Title;
+                                mentorRank=data.Rank;
+                                mentorFleet=data.Fleet;
+                                mentorEmail=data.Email;
+                        //kurang fleet, mentor title rank sama mentor email
+	                }
+                        if (data.Mentor==mentorName){
+                                groupTable.innerHTML+="<tr><td>"+ data.Title +"</td><td>" + data.Rank +"</td><td>" + data.Name +"</td><td>" + data.Fleet +"</td><td>"+data.Email +"</td></tr>";
+                                groupTitle=data.Title;
+                                groupRank=data.Rank;
+                                groupFleet=data.Fleet;
+                                groupEmail=data.Email;
+                        }
+                        if (data.Mentor==userName){
+                                menteesTable.innerHTML+="<tr><td>"+ data.Title +"</td><td>" + data.Rank +"</td><td>" + data.Name +"</td><td>" + data.Fleet +"</td><td>"+data.Email +"</td></tr>";
+                                menteesTitle=data.Title;
+                                menteesRank=data.Rank;
+                                menteesFleet=data.Fleet;
+                                menteesEmail=data.Email;
+                        }
+                });
+                }
+                </script>
+        </body>
+</html>
