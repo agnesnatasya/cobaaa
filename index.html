@@ -55,7 +55,7 @@
                 groupTable.innerHTML+="<table><tr><th>Title</th><th>Rank</th><th>Name</th><th>Fleet</th><th>Email</th></tr>";
                 menteesTable.innerHTML="";
                 menteesTable.innerHTML+="<table><tr><th>Title</th><th>Rank</th><th>Name</th><th>Fleet</th><th>Email</th></tr>";
-                d3.csv("https://raw.githubusercontent.com/agnesnatasya/cobaaa/master/abal.csv", function(data){
+                d3.csv("ftp://flightops.sq.com.sg/doc/fam/FltMan/testmentor.csv", function(data){
 	                if (Number(data.PN)==Number(x)){
                                 y.innerHTML+="<tr><td>"+ data.Title +"</td><td>" + data.Rank +"</td><td>" + data.Name +"</td><td>" + data.Fleet +"</td></tr>";
                                 userTitle=data.Title;
