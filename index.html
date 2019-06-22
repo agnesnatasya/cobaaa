@@ -2,95 +2,116 @@
         <head>
                 <script type="text/javascript" src="d3.min.js"></script>
                 <style>
-                 th:empty, td:empty { background: gray; }
-                </style>
-                                
+                 td:empty::before {content: "N/A";}
+                 table   {font-family: sans-serif; text-align: center; border-collapse: collapse;}
+                 th,td  {border:1px solid;}
+                 th     {font-size:18; background-color:midnightblue; color: white;}
+                 td     {font-size:16;}
+                 caption{font-size:20; font-weight:bold;}
+                 span    {font-family: sans-serif; font-size:20;}
+                 input   {font-family: sans-serif; font-size:19;}
+                 button  {font-family: sans-serif; font-size:20;}
+                 #load     {color:gray}
+                 v\:*{
+                         display: inline-block;
+                 }
+                </style>                     
         </head>
         <body>
-                <br>
-                <br>
-
-        Enter your 8-digit staff number: <input type="text" id="foo" value="">
-        <button onclick="getValue()">Submit</button><br>
-        <table id="boo" border=1 width=50% style="float: left;"></table>
-        <table id="mentor" border=1 width=50%></table>
-        <table id="group" border=1 width=100%></table>
-        <table id="mentees" border=1 width=100%></table>
-        
-                
-                
-                <script>
+        <img src="symbol.jpg" width=100%><br><br>
+        <span>Enter your 8-digit staff number </span><input type="text" id="staff" value="" maxlength=8>
+        <button onclick="getValue()">Submit</button>
+        <span id="load" hidden=true>Loading... Refresh if not responding</span><br>
+        <table id="user" width=100%></table> <br><br>
+        <table id="mentor" width=100%></table><br><br>
+        <table id="group" width=100%></table> <br><br>
+        <table id="mentees" width=100%></table> <br><br>
+        <script>
+                var numberOfRows;
                 function getValue() {
-                var y = document.getElementById("boo");
+                var user = document.getElementById("user");
                 var mentor=document.getElementById("mentor");
                 var groupTable = document.getElementById("group");
                 var menteesTable = document.getElementById("mentees");
-                var x = document.getElementById("foo").value;
-                var userTitle;
-                var userRank;
-                var userFleet;
+                var staffno = document.getElementById("staff").value;
                 var userName;
-                var mentorTitle;
-                var mentorRank;
                 var mentorName;
-                var mentorFleet;
-                var mentorEmail;
-                var groupTitle;
-                var groupRank;
-                var groupName;
-                var groupFleet;
-                var groupEmail;
-                var menteesTitle;
-                var menteesRank;
-                var menteesName;
-                var menteesFleet;
-                var menteesEmail;
-                var indCount=0;
-                var presence=[];
-                y.innerHTML=""
-                y.innerHTML+="<tr><th>Title</th><th>Rank</th><th>Name</th><th>Fleet</th></tr>";
-                mentor.innerHTML=""
-                mentor.innerHTML+="<tr><th>Mentor's Title</th><th>Mentor's Rank</th><th>Mentor's Name</th><th>Mentor's Fleet</th><th>Mentor's Email</th></tr>";
+                user.innerHTML=""
+                user.innerHTML+="<caption>Personal Particulars</caption><tr><th width=10%>Title</th><th width=10%>Rank</th><th width=30%>Name</th><th width=10%>Fleet</th><th width=40%>Email</th></tr>";
+                mentor.innerHTML="";
+                mentor.innerHTML+="<caption>Mentor's Particulars</caption><tr><th width=10%>Mentor's Title</th><th width=10%>Mentor's Rank</th><th width=30%>Mentor's Name</th><th width=10%>Mentor's Fleet</th><th width=40%>Mentor's Email</th></tr>";
                 groupTable.innerHTML="";
-                groupTable.innerHTML+="<table><tr><th>Title</th><th>Rank</th><th>Name</th><th>Fleet</th><th>Email</th></tr>";
+                groupTable.innerHTML+="<caption>My Mentor's Group</caption><tr><th width=10%>Title</th><th width=10%>Rank</th><th width=30%>Name</th><th width=10%>Fleet</th><th width=40%>Email</th></tr>";
                 menteesTable.innerHTML="";
-                menteesTable.innerHTML+="<table><tr><th>Title</th><th>Rank</th><th>Name</th><th>Fleet</th><th>Email</th></tr>";
-                d3.csv("csv/abal.csv", function(data){
-	                if (Number(data.PN)==Number(x)){
-                                y.innerHTML+="<tr><td>"+ data.Title +"</td><td>" + data.Rank +"</td><td>" + data.Name +"</td><td>" + data.Fleet +"</td></tr>";
-                                userTitle=data.Title;
-                                userRank=data.Rank;
-                                userFleet=data.Fleet;
+                menteesTable.innerHTML+="<caption>My Mentees</caption><tr><th width=10%>Title</th><th width=10%>Rank</th><th width=30%>Name</th><th width=10%>Fleet</th><th width=40%>Email</th></tr>";
+                document.getElementById('user').hidden = true;
+                document.getElementById('mentor').hidden = true;
+                document.getElementById('group').hidden = true;
+                document.getElementById('mentees').hidden = true;
+                document.getElementById('load').hidden = false;
+                var another=0;
+                var counter=0;
+
+                //Check the person's name and mentor's name.
+                d3.csv("https://raw.githubusercontent.com/agnesnatasya/cobaaa/master/abal.csv",function(data){
+                        if (Number(data.PN)==Number(staffno)){
+                                user.innerHTML+= "<tr><td>"+data.Title +"</td><td>" + data.Rank +"</td><td>" + data.Name +"</td><td>" + data.Fleet +"</td><td>"+data.Email+"</td></tr>";
                                 userName=data.Name;
                                 mentorName=data.Mentor;
-                        //kurang fleet, mentor title rank sama mentor email
+                                counter+=1;
 	                }
+                        counter+=1;    
                 });
-                d3.csv("https://github.com/agnesnatasya/cobalagi/blob/master/abal.csv", function(data){
-	                if (data.Name==mentorName){
-                                mentor.innerHTML+="<tr><td>"+ data.Title +"</td><td>" + data.Rank +"</td><td>" + data.Name +"</td><td>" + data.Fleet +"</td><td>" + data.Email+"</td></tr>";
-                                mentorTitle=data.Title;
-                                mentorRank=data.Rank;
-                                mentorFleet=data.Fleet;
-                                mentorEmail=data.Email;
-                        //kurang fleet, mentor title rank sama mentor email
+                
+                d3.csv("https://raw.githubusercontent.com/agnesnatasya/cobaaa/master/abal.csv", function(data){        
+                        //Mentor's particulars
+                        if (data.Name==mentorName){
+                                mentor.innerHTML+="<tr><td>"+ data.Title +"</td><td>" + data.Rank +"</td><td>" + data.Name +"</td><td>" + data.Fleet +"</td><td>" + data.Email+"</td></tr>";   
 	                }
+                        //Group's Particular
                         if (data.Mentor==mentorName){
                                 groupTable.innerHTML+="<tr><td>"+ data.Title +"</td><td>" + data.Rank +"</td><td>" + data.Name +"</td><td>" + data.Fleet +"</td><td>"+data.Email +"</td></tr>";
-                                groupTitle=data.Title;
-                                groupRank=data.Rank;
-                                groupFleet=data.Fleet;
-                                groupEmail=data.Email;
                         }
+                        //Mentees' Particular
                         if (data.Mentor==userName){
                                 menteesTable.innerHTML+="<tr><td>"+ data.Title +"</td><td>" + data.Rank +"</td><td>" + data.Name +"</td><td>" + data.Fleet +"</td><td>"+data.Email +"</td></tr>";
-                                menteesTitle=data.Title;
-                                menteesRank=data.Rank;
-                                menteesFleet=data.Fleet;
-                                menteesEmail=data.Email;
+                        }
+                        another+=1;
+                        //Check if no data, add N/A
+                        if (another==counter-1){
+                                if (document.getElementById("user").rows.length<=1){
+                                        addUserRow();
+                                }
+                                if (document.getElementById("mentor").rows.length<=1) {
+                                        addMentorRow();
+                                }
+                                if (document.getElementById("group").rows.length<=1) {
+                                        addGroupRow();
+                                }
+                                if (document.getElementById("mentees").rows.length<=1) {
+                                        addMenteesRow();
+                                }
+                                document.getElementById('user').hidden = false;
+                                document.getElementById('mentor').hidden = false;
+                                document.getElementById('group').hidden = false;
+                                document.getElementById('mentees').hidden = false;
+                                document.getElementById('load').hidden = true;
                         }
                 });
                 }
-                </script>
+                function addUserRow(){
+                        document.getElementById("user").innerHTML+="<tr><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>";
+                }
+                function addMentorRow(){
+                        document.getElementById("mentor").innerHTML+="<tr><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>";
+                }
+                function addGroupRow(){
+                        document.getElementById("group").innerHTML+="<tr><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>";
+                }
+                function addMenteesRow(){
+                        document.getElementById("mentees").innerHTML+="<tr><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>";
+                }
+                
+        </script>
         </body>
 </html>
